@@ -4,8 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login | Ashein Host</title>
+  
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
       background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
@@ -17,60 +22,65 @@
   </style>
 </head>
 <body class="text-white flex items-center justify-center h-screen">
-
   <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
     <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Welcome Back</h2>
+
     <form id="login-form">
       <label class="block mb-4">
         <span>Email</span>
-        <input id="email" type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required>
+        <input id="email" type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required />
       </label>
       <label class="block mb-6">
         <span>Password</span>
-        <input id="password" type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required>
+        <input id="password" type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required />
       </label>
+
       <button type="submit" class="w-full py-3 bg-sky-500 rounded hover:bg-sky-600 font-semibold">
         Login
       </button>
+
       <p class="text-sm text-center mt-4 text-gray-400">
-        Don’t have an account? <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
+        Don’t have an account?
+        <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
       </p>
     </form>
   </div>
 
   <script>
-    const supabase = supabase.createClient(
+    // ✅ Initialize Supabase client
+    const client = supabase.createClient(
       'https://gwraaxzunyibwvbrefji.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
     );
 
+    // ✅ Check session on page load
     document.addEventListener("DOMContentLoaded", async () => {
-      const { data: sessionData, error } = await supabase.auth.getSession();
-
-      console.log("Checking session:", sessionData);
-
-      if (sessionData.session) {
+      const { data, error } = await client.auth.getUser();
+      if (data?.user) {
+        // Already logged in
         window.location.href = "dashboard.html";
       }
     });
 
+    // ✅ Handle login form
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { data, error } = await client.auth.signInWithPassword({
+        email,
+        password
+      });
 
       if (error) {
         alert("❌ Login failed: " + error.message);
       } else {
-        console.log("Login successful:", data);
-        // Let Supabase store the session and redirect
+        alert("✅ Login successful!");
         window.location.href = "dashboard.html";
       }
     });
   </script>
-
 </body>
-</html>
+        </html>
