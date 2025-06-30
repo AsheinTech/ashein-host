@@ -1,54 +1,70 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Dashboard | Ashein Host</title>  <!-- TailwindCSS -->  <script src="https://cdn.tailwindcss.com"></script>  <!-- Supabase JS SDK -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
-    body { background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
+  <title>Dashboard | Ashein Host</title>
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
       background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
     }
     .glow-box {
       box-shadow: 0 0 12px #38bdf8, 0 0 20px #0ea5e9;
     }
-  </style></head>
-<body class="text-white min-h-screen py-10 px-4">  <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-xl glow-box">
-    <h1 class="text-3xl font-bold text-cyan-400 mb-4 text-center">Welcome to Your Dashboard</h1><!-- User Info -->
-<div class="mb-6 text-center">
-  <p class="text-gray-300">Logged in as:</p>
-  <p id="user-email" class="font-semibold text-blue-300">Loading...</p>
-</div>
+  </style>
+</head>
+<body class="text-white min-h-screen py-10 px-4">
 
-<!-- Create Bot Form -->
-<div class="bg-gray-900 p-6 rounded-lg mb-8">
-  <h2 class="text-xl font-semibold text-cyan-300 mb-4">🚀 Create New Bot</h2>
-  <form id="bot-form" class="space-y-4">
-    <div>
-      <label class="block mb-1">Bot Name</label>
-      <input type="text" id="bot-name" required class="w-full p-3 rounded bg-gray-800 text-white outline-none focus:ring-2 ring-cyan-500">
+  <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-xl glow-box">
+    <h1 class="text-3xl font-bold text-cyan-400 mb-4 text-center">Welcome to Your Dashboard</h1>
+
+    <!-- User Info -->
+    <div class="mb-6 text-center">
+      <p class="text-gray-300">Logged in as:</p>
+      <p id="user-email" class="font-semibold text-blue-300">Loading...</p>
     </div>
-    <div>
-      <label class="block mb-1">Description</label>
-      <textarea id="bot-desc" rows="3" required class="w-full p-3 rounded bg-gray-800 text-white outline-none focus:ring-2 ring-cyan-500"></textarea>
+
+    <!-- Create Bot Form -->
+    <div class="bg-gray-900 p-6 rounded-lg mb-8">
+      <h2 class="text-xl font-semibold text-cyan-300 mb-4">🚀 Create New Bot</h2>
+      <form id="bot-form" class="space-y-4">
+        <div>
+          <label class="block mb-1">Bot Name</label>
+          <input type="text" id="bot-name" required class="w-full p-3 rounded bg-gray-800 text-white outline-none focus:ring-2 ring-cyan-500">
+        </div>
+        <div>
+          <label class="block mb-1">Description</label>
+          <textarea id="bot-desc" rows="3" required class="w-full p-3 rounded bg-gray-800 text-white outline-none focus:ring-2 ring-cyan-500"></textarea>
+        </div>
+        <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 rounded font-semibold">
+          Create Bot
+        </button>
+      </form>
     </div>
-    <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 rounded font-semibold">
-      Create Bot
-    </button>
-  </form>
-</div>
 
-<!-- User's Bots -->
-<div class="bg-gray-900 p-6 rounded-lg">
-  <h2 class="text-xl font-semibold text-cyan-300 mb-4">🤖 Your Bots</h2>
-  <ul id="bot-list" class="space-y-3 text-left text-white"></ul>
-</div>
+    <!-- User's Bots -->
+    <div class="bg-gray-900 p-6 rounded-lg">
+      <h2 class="text-xl font-semibold text-cyan-300 mb-4">🤖 Your Bots</h2>
+      <ul id="bot-list" class="space-y-3 text-left text-white"></ul>
+    </div>
 
-<!-- Logout -->
-<div class="text-center mt-6">
-  <button id="logout" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded font-semibold">
-    Logout
-  </button>
-</div>
+    <!-- Logout -->
+    <div class="text-center mt-6">
+      <button id="logout" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded font-semibold">
+        Logout
+      </button>
+    </div>
+  </div>
 
-  </div>  <!-- Supabase Auth + Bot Logic -->  <script>
+  <!-- Supabase Auth + Bot Logic -->
+  <script>
     const supabase = supabase.createClient(
       'https://gwraaxzunyibwvbrefji.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
@@ -59,11 +75,6 @@
     // Get and show user info
     supabase.auth.getUser().then(async ({ data, error }) => {
       if (!data.user) return (window.location.href = "login.html");
-      if (!data.user.email_confirmed_at) {
-        alert("Please verify your email before accessing the dashboard.");
-        await supabase.auth.signOut();
-        return (window.location.href = "login.html");
-      }
 
       currentUser = data.user;
       document.getElementById("user-email").textContent = currentUser.email;
@@ -75,8 +86,8 @@
         .eq("user_id", currentUser.id)
         .order("created_at", { ascending: false });
 
+      const botList = document.getElementById("bot-list");
       if (bots && bots.length > 0) {
-        const botList = document.getElementById("bot-list");
         bots.forEach(bot => {
           const li = document.createElement("li");
           li.innerHTML = `
@@ -89,16 +100,18 @@
                 </div>
                 <a href="bot-settings.html?bot_id=${bot.id}" class="text-sky-400 underline text-sm">⚙️ Settings</a>
               </div>
-              <p class="text-sm mt-2">Status: <span class="px-2 py-1 rounded text-xs ${
-                bot.deployed_status === 'live' ? 'bg-green-600' :
-                bot.deployed_status === 'failed' ? 'bg-red-600' :
-                'bg-yellow-500'
-              }">${bot.deployed_status}</span></p>
+              <p class="text-sm mt-2">Status:
+                <span class="px-2 py-1 rounded text-xs ${
+                  bot.deployed_status === 'live' ? 'bg-green-600' :
+                  bot.deployed_status === 'failed' ? 'bg-red-600' :
+                  'bg-yellow-500'
+                }">${bot.deployed_status}</span>
+              </p>
             </div>`;
           botList.appendChild(li);
         });
       } else {
-        document.getElementById("bot-list").innerHTML = "<p class='text-gray-400'>No bots yet. Create one!</p>";
+        botList.innerHTML = "<p class='text-gray-400'>No bots yet. Create one!</p>";
       }
     });
 
@@ -125,5 +138,6 @@
         window.location.reload();
       }
     });
-  </script></body>
+  </script>
+</body>
   </html>
