@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sign Up | Ashein Host</title>
+  <title>Signup | Ashein Host</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
@@ -18,7 +18,7 @@
 </head>
 <body class="text-white flex items-center justify-center h-screen">
   <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
-    <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Create Account</h2>
+    <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Create Your Account</h2>
     <form id="signup-form">
       <label class="block mb-4">
         <span>Email</span>
@@ -34,11 +34,14 @@
       <p class="text-sm text-center mt-4 text-gray-400">
         Already have an account? <a href="login.html" class="text-sky-400 underline">Login</a>
       </p>
+      <p class="text-sm text-center mt-2 text-red-400 hidden" id="resend-link">
+        Didn't get the email? <a href="#" class="underline" id="resend-btn">Resend verification email</a>
+      </p>
     </form>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", async () => {
       const { createClient } = supabase;
 
       const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
@@ -46,21 +49,46 @@
 
       const client = createClient(supabaseUrl, supabaseKey);
 
+      const resendLink = document.getElementById("resend-link");
+      const resendBtn = document.getElementById("resend-btn");
+
       document.getElementById("signup-form").addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        const { data, error } = await client.auth.signUp({ email, password });
+        const { error } = await client.auth.signUp({ email, password });
 
         if (error) {
           alert("❌ Signup failed: " + error.message);
+          if (error.message.toLowerCase().includes("already registered")) {
+            resendLink.classList.remove("hidden");
+          }
         } else {
-          alert("✅ Account created!");
-          window.location.href = "dashboard.html";
+          alert("✅ Signup successful! Please check your email for verification.");
+        }
+      });
+
+      resendBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        if (!email) {
+          alert("⚠️ Please enter your email to resend verification.");
+          return;
+        }
+
+        const { error } = await client.auth.resend({
+          type: 'signup',
+          email: email
+        });
+
+        if (error) {
+          alert("❌ Failed to resend email: " + error.message);
+        } else {
+          alert("📨 Verification email resent!");
         }
       });
     });
   </script>
 </body>
-                                   </html>
+        </html>
