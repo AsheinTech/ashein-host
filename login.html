@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | Ashein Host</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
+    }
+    .glow-border {
+      border: 2px solid #7dd3fc;
+      box-shadow: 0 0 12px #7dd3fc, 0 0 25px #38bdf8;
+    }
+  </style>
+</head>
+<body class="text-white flex items-center justify-center h-screen">
 
+  <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
+    <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Welcome Back</h2>
+    <form>
+      <label class="block mb-4">
+        <span>Email</span>
+        <input type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required>
+      </label>
+      <label class="block mb-6">
+        <span>Password</span>
+        <input type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required>
+      </label>
+      <button type="submit" class="w-full py-3 bg-sky-500 rounded hover:bg-sky-600 font-semibold">
+        Login
+      </button>
+      <p class="text-sm text-center mt-4 text-gray-400">
+        Don’t have an account? <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
+      </p>
+    </form>
+  </div>
+
+</body>
+        </html>
