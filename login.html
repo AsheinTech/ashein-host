@@ -9,64 +9,27 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Supabase JS SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    body {
-      background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
-    }
-
-    .glow-border {
-      border: 2px solid #38bdf8;
-      box-shadow: 0 0 12px #38bdf8, 0 0 25px #0ea5e9;
-    }
-  </style>
-</head>
-<body class="text-white flex items-center justify-center h-screen">
-
-  <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
-    <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Welcome Back</h2>
-    <form id="login-form">
-      <label class="block mb-4">
-        <span>Email</span>
-        <input id="email" type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required />
-      </label>
-      <label class="block mb-6">
-        <span>Password</span>
-        <input id="password" type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required />
-      </label>
-      <button type="submit" class="w-full py-3 bg-sky-500 rounded hover:bg-sky-600 font-semibold">
-        Login
-      </button>
-      <p class="text-sm text-center mt-4 text-gray-400">
-        Don’t have an account? <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
-      </p>
-    </form>
-  </div>
-
   <script>
-    const { createClient } = supabase;
-    const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4';
+  const { createClient } = supabase; // ✅ Extract it from the Supabase global
+  const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4';
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
+  const client = createClient(supabaseUrl, supabaseKey); // ✅ Define FIRST
 
-    // If user already logged in, redirect to dashboard
-    document.addEventListener("DOMContentLoaded", async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
+  document.addEventListener("DOMContentLoaded", () => {
+    // ✅ Now it's safe to use `client`
+    client.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
         window.location.href = 'dashboard.html';
       }
     });
 
-    // Login form logic
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await client.auth.signInWithPassword({ email, password });
 
       if (error) {
         alert("❌ Login failed: " + error.message);
@@ -75,6 +38,7 @@
         window.location.href = "dashboard.html";
       }
     });
-  </script>
+  });
+    </script>
 </body>
-  </html
+</html>
