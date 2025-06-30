@@ -14,132 +14,134 @@
     }
   </style>
 </head>
-<body class="text-white min-h-screen py-10 px-4">
-  <div class="max-w-4xl mx-auto space-y-8">
-    <div class="bg-gray-800 p-8 rounded-xl glow-box text-center">
-      <h1 class="text-3xl font-bold text-cyan-400 mb-2">Welcome to Your Dashboard</h1>
-      <p class="text-gray-300">Logged in as: <span id="user-email" class="font-semibold text-blue-300">Loading...</span></p>
-      <p class="mt-2 text-sm text-cyan-300">Coins: <span id="coin-count">0</span></p>
-    </div><div class="grid grid-cols-2 gap-4 text-center">
-  <div class="bg-gray-800 p-4 rounded-lg">
-    <p>Total Bots</p>
-    <h2 id="total-bots" class="text-2xl font-bold text-cyan-400">0</h2>
+<body class="text-white min-h-screen">
+  <div class="flex flex-col md:flex-row min-h-screen">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-64 bg-gray-900 p-6 space-y-4">
+      <h2 class="text-2xl font-bold text-cyan-400">Ashein Host</h2>
+      <nav class="space-y-2">
+        <a href="#" class="block text-gray-200 hover:text-white">Dashboard</a>
+        <a href="#" class="block text-gray-200 hover:text-white">My Bots</a>
+        <a href="#" class="block text-gray-200 hover:text-white">Coin Balance</a>
+        <a href="#" class="block text-gray-200 hover:text-white">Referrals</a>
+      </nav>
+      <button id="logout" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded font-semibold w-full mt-6">
+        Logout
+      </button>
+    </aside><!-- Main Content -->
+<main class="flex-1 bg-gray-800 p-6">
+  <h1 class="text-3xl font-bold text-cyan-300 mb-6">Welcome, <span id="user-email">Loading...</span></h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div class="bg-gray-700 p-6 rounded-lg shadow glow-box">
+      <p class="text-sm text-gray-300">Total Bots</p>
+      <h2 id="total-bots" class="text-2xl font-bold">0</h2>
+    </div>
+    <div class="bg-gray-700 p-6 rounded-lg shadow glow-box">
+      <p class="text-sm text-gray-300">Active Bots</p>
+      <h2 id="active-bots" class="text-2xl font-bold">0</h2>
+    </div>
+    <div class="bg-gray-700 p-6 rounded-lg shadow glow-box">
+      <p class="text-sm text-gray-300">Coins</p>
+      <h2 id="coin-balance" class="text-2xl font-bold">0</h2>
+    </div>
   </div>
-  <div class="bg-gray-800 p-4 rounded-lg">
-    <p>Active Bots</p>
-    <h2 id="active-bots" class="text-2xl font-bold text-green-400">0</h2>
+
+  <div class="bg-gray-900 p-6 rounded-lg mb-8">
+    <h2 class="text-xl font-semibold text-cyan-300 mb-4">🚀 Create New Bot</h2>
+    <form id="bot-form" class="space-y-4">
+      <input type="text" id="bot-name" placeholder="Bot Name" required class="w-full p-3 rounded bg-gray-800 text-white focus:ring-2 ring-cyan-500">
+      <textarea id="bot-desc" rows="3" placeholder="Bot Description" required class="w-full p-3 rounded bg-gray-800 text-white focus:ring-2 ring-cyan-500"></textarea>
+      <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 rounded font-semibold">
+        Create Bot
+      </button>
+    </form>
   </div>
-  <div class="bg-gray-800 p-4 rounded-lg">
-    <p>Inactive Bots</p>
-    <h2 id="inactive-bots" class="text-2xl font-bold text-yellow-400">0</h2>
+
+  <div class="bg-gray-900 p-6 rounded-lg">
+    <h2 class="text-xl font-semibold text-cyan-300 mb-4">🤖 Your Bots</h2>
+    <ul id="bot-list" class="space-y-3"></ul>
   </div>
-  <div class="bg-gray-800 p-4 rounded-lg">
-    <p>Available Slots</p>
-    <h2 id="slots-left" class="text-2xl font-bold text-pink-400">2</h2>
-  </div>
-</div>
-
-<div class="bg-gray-800 p-6 rounded-lg">
-  <h2 class="text-xl font-semibold text-cyan-300 mb-4">🚀 Create New Bot (10 coins)</h2>
-  <form id="bot-form" class="space-y-4">
-    <input type="text" id="bot-name" placeholder="Bot Name" required class="w-full p-3 rounded bg-gray-900 text-white" />
-    <textarea id="bot-desc" rows="2" placeholder="Description" required class="w-full p-3 rounded bg-gray-900 text-white"></textarea>
-    <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 rounded font-semibold">Create Bot</button>
-  </form>
-</div>
-
-<div class="bg-gray-800 p-6 rounded-lg">
-  <h2 class="text-xl font-semibold text-cyan-300 mb-4">🤖 Your Bots</h2>
-  <ul id="bot-list" class="space-y-4"></ul>
-</div>
-
-<div class="bg-gray-800 p-6 rounded-lg">
-  <h2 class="text-xl font-semibold text-cyan-300 mb-4">💰 Daily Reward</h2>
-  <button id="daily-claim" class="w-full py-2 bg-green-600 hover:bg-green-700 rounded">Claim 10 Coins</button>
-  <p id="daily-msg" class="text-sm text-gray-400 mt-2"></p>
-</div>
-
-<div class="bg-gray-800 p-6 rounded-lg">
-  <h2 class="text-xl font-semibold text-cyan-300 mb-4">📢 Referral Program</h2>
-  <p>Your Code: <span id="ref-code" class="font-mono bg-gray-700 px-2 py-1 rounded"></span></p>
-  <p class="text-sm text-gray-400 mt-2">Share your referral code to earn bonus coins when someone signs up!</p>
-</div>
-
-<div class="text-center">
-  <button id="logout" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded font-semibold">Logout</button>
-</div>
+</main>
 
   </div>  <script>
     const { createClient } = supabase;
     const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'; // Replace with actual key
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4';
     const client = createClient(supabaseUrl, supabaseKey);
 
     let currentUser = null;
 
     document.addEventListener("DOMContentLoaded", async () => {
       const { data: sessionData } = await client.auth.getSession();
-      if (!sessionData.session?.user) return location.href = "login.html";
+
+      if (!sessionData || !sessionData.session || !sessionData.session.user) {
+        return (window.location.href = "login.html");
+      }
 
       currentUser = sessionData.session.user;
       document.getElementById("user-email").textContent = currentUser.email;
-      document.getElementById("ref-code").textContent = currentUser.email.split("@")[0] + "_ref";
 
-      const { data: userCoins } = await client.from("profiles").select("coins, last_claim").eq("id", currentUser.id).single();
-      const coins = userCoins?.coins || 0;
-      document.getElementById("coin-count").textContent = coins;
+      const { data: bots } = await client
+        .from("bots")
+        .select("*")
+        .eq("user_id", currentUser.id);
 
-      // Bots
-      const { data: bots } = await client.from("bots").select("*").eq("user_id", currentUser.id);
-      const list = document.getElementById("bot-list");
-      if (bots.length) {
+      document.getElementById("total-bots").textContent = bots.length;
+      document.getElementById("active-bots").textContent = bots.filter(bot => bot.deployed_status === 'live').length;
+
+      const botList = document.getElementById("bot-list");
+      if (bots.length > 0) {
         bots.forEach(bot => {
           const li = document.createElement("li");
-          li.className = "bg-gray-900 p-4 rounded";
-          li.innerHTML = `<strong>${bot.name}</strong><br>${bot.description}<br><small>${bot.deployed_status}</small>`;
-          list.appendChild(li);
+          li.innerHTML = `
+            <div class="bg-gray-800 p-4 rounded shadow">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h3 class="text-lg font-bold text-cyan-400">${bot.name}</h3>
+                  <p class="text-sm text-gray-300">${bot.description}</p>
+                  <p class="text-xs text-gray-500">${new Date(bot.created_at).toLocaleString()}</p>
+                </div>
+                <a href="bot-settings.html?bot_id=${bot.id}" class="text-sm text-sky-400 underline">⚙️ Settings</a>
+              </div>
+              <p class="text-sm mt-2">Status:
+                <span class="text-xs px-2 py-1 rounded ${
+                  bot.deployed_status === 'live' ? 'bg-green-600' :
+                  bot.deployed_status === 'failed' ? 'bg-red-600' :
+                  'bg-yellow-500'}">${bot.deployed_status}</span>
+              </p>
+            </div>
+          `;
+          botList.appendChild(li);
         });
-      } else list.innerHTML = "<p class='text-gray-400'>No bots yet.</p>";
-
-      // Stats
-      document.getElementById("total-bots").textContent = bots.length;
-      document.getElementById("active-bots").textContent = bots.filter(b => b.deployed_status === 'live').length;
-      document.getElementById("inactive-bots").textContent = bots.filter(b => b.deployed_status !== 'live').length;
-      document.getElementById("slots-left").textContent = 2 - bots.length;
-
-      // Daily Claim
-      const lastClaim = new Date(userCoins?.last_claim);
-      const now = new Date();
-      if (now - lastClaim < 24 * 60 * 60 * 1000) {
-        document.getElementById("daily-claim").disabled = true;
-        document.getElementById("daily-msg").textContent = "✅ Already claimed today.";
+      } else {
+        botList.innerHTML = "<p class='text-gray-400'>No bots created yet.</p>";
       }
-    });
 
-    document.getElementById("bot-form").addEventListener("submit", async e => {
-      e.preventDefault();
-      const name = document.getElementById("bot-name").value;
-      const desc = document.getElementById("bot-desc").value;
-      const { data: profile } = await client.from("profiles").select("coins").eq("id", currentUser.id).single();
-      if (profile.coins < 10) return alert("❌ Not enough coins");
-
-      const { error } = await client.from("bots").insert([{ name, description: desc, user_id: currentUser.id }]);
-      if (!error) {
-        await client.from("profiles").update({ coins: profile.coins - 10 }).eq("id", currentUser.id);
-        alert("✅ Bot created");
-        location.reload();
-      } else alert("❌ Failed to create bot: " + error.message);
-    });
-
-    document.getElementById("daily-claim").addEventListener("click", async () => {
-      await client.from("profiles").update({ coins: supabase.literal("coins + 10"), last_claim: new Date().toISOString() }).eq("id", currentUser.id);
-      alert("✅ 10 Coins added!");
-      location.reload();
+      // Placeholder coin system value
+      document.getElementById("coin-balance").textContent = "500"; // You can later fetch from DB
     });
 
     document.getElementById("logout").addEventListener("click", async () => {
       await client.auth.signOut();
-      location.href = "login.html";
+      window.location.href = "login.html";
+    });
+
+    document.getElementById("bot-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const botName = document.getElementById("bot-name").value;
+      const botDesc = document.getElementById("bot-desc").value;
+
+      const { error } = await client
+        .from("bots")
+        .insert([{ name: botName, description: botDesc, user_id: currentUser.id }]);
+
+      if (error) {
+        alert("❌ Failed to create bot: " + error.message);
+      } else {
+        alert("✅ Bot created successfully!");
+        window.location.reload();
+      }
     });
   </script></body>
-</html>
+        </html>
