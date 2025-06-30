@@ -39,6 +39,14 @@
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
     );
 
+    document.addEventListener("DOMContentLoaded", function () {
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user?.email_confirmed_at) {
+          window.location.href = 'dashboard.html';
+        }
+      });
+    });
+
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -49,10 +57,12 @@
 
       if (error) {
         alert("❌ Login failed: " + error.message);
+      } else if (!data.user.email_confirmed_at) {
+        alert("⚠️ Please verify your email before continuing.");
       } else {
         alert("✅ Login successful!");
         window.location.href = "dashboard.html";
       }
     });
   </script></body>
-  </html>
+        </html>
