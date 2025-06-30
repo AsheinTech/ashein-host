@@ -1,10 +1,16 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login | Ashein Host</title>
+
+  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
       background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
@@ -15,7 +21,9 @@
     }
   </style>
 </head>
-<body class="text-white flex items-center justify-center h-screen">  <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
+<body class="text-white flex items-center justify-center h-screen">
+
+  <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
     <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Welcome Back</h2>
     <form id="login-form">
       <label class="block mb-4">
@@ -33,18 +41,22 @@
         Don’t have an account? <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
       </p>
     </form>
-  </div>  <script>
+  </div>
+
+  <script>
     const supabase = supabase.createClient(
       'https://gwraaxzunyibwvbrefji.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
     );
 
-    document.addEventListener("DOMContentLoaded", function () {
-      supabase.auth.getUser().then(({ data: { user } }) => {
-        if (user) {
-          window.location.href = 'dashboard.html';
-        }
-      });
+    // Check if user is already signed in
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { data: sessionData, error } = await supabase.auth.getSession();
+      console.log("🟢 Checking existing session:", sessionData);
+      if (sessionData.session) {
+        console.log("✅ Already signed in, redirecting...");
+        window.location.href = "dashboard.html";
+      }
     });
 
     document.getElementById("login-form").addEventListener("submit", async (e) => {
@@ -53,14 +65,29 @@
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
+      console.log("🔵 Signing in with:", email);
+
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
+        console.error("❌ Login failed:", error);
         alert("❌ Login failed: " + error.message);
-      } else {
-        alert("✅ Login successful!");
-        window.location.href = "dashboard.html";
+        return;
       }
+
+      console.log("✅ Login data:", data);
+
+      const { data: sessionCheck } = await supabase.auth.getSession();
+      console.log("🟢 Session after login:", sessionCheck);
+
+      if (!sessionCheck.session) {
+        alert("⚠️ Login succeeded but no session saved.");
+        return;
+      }
+
+      alert("✅ Login successful!");
+      window.location.href = "dashboard.html";
     });
-  </script></body>
-  </html>
+  </script>
+</body>
+          </html>
