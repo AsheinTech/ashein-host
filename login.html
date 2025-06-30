@@ -34,6 +34,9 @@
       <p class="text-sm text-center mt-4 text-gray-400">
         Don’t have an account? <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
       </p>
+      <p class="text-sm text-center mt-2 text-red-400 hidden" id="resend-link">
+        Didn't get the email? <a href="#" class="underline" id="resend-btn">Resend verification email</a>
+      </p>
     </form>
   </div>
 
@@ -46,14 +49,16 @@
 
       const client = createClient(supabaseUrl, supabaseKey);
 
-      // Check if already logged in
+      // Redirect if already logged in
       const { data: { user } } = await client.auth.getUser();
       if (user) {
         window.location.href = "dashboard.html";
         return;
       }
 
-      // Login form submission
+      const resendLink = document.getElementById("resend-link");
+      const resendBtn = document.getElementById("resend-btn");
+
       document.getElementById("login-form").addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("email").value;
@@ -63,9 +68,32 @@
 
         if (error) {
           alert("❌ Login failed: " + error.message);
+          if (error.message.toLowerCase().includes("email not confirmed")) {
+            resendLink.classList.remove("hidden");
+          }
         } else {
           alert("✅ Login successful!");
           window.location.href = "dashboard.html";
+        }
+      });
+
+      resendBtn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        if (!email) {
+          alert("⚠️ Please enter your email to resend confirmation.");
+          return;
+        }
+
+        const { error } = await client.auth.resend({
+          type: 'signup',
+          email: email
+        });
+
+        if (error) {
+          alert("❌ Failed to resend email: " + error.message);
+        } else {
+          alert("📨 Verification email resent!");
         }
       });
     });
