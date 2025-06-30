@@ -1,10 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login - Ashein Host</title>
-  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #000428, #004e92);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .box {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00f0ff;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    .box h2 {
+      margin-bottom: 1rem;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #00f0ff;
+      color: #000;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    a {
+      color: #00f0ff;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
   <div class="box">
@@ -15,19 +64,12 @@
       <button type="submit">Login</button>
     </form>
     <p>Don’t have an account? <a href="signup.html">Sign Up</a></p>
-  </div>
-
-  <!-- ✅ Supabase SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-
-  <script>
-    // ✅ Create Supabase Client
+  </div>  <!-- ✅ Supabase SDK -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>  <script>
     const supabase = supabase.createClient(
       "https://gwraaxzunyibwvbrefji.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4"
     );
 
-    // ✅ Login form submission
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value;
@@ -41,17 +83,14 @@
       if (error) {
         alert("❌ Login failed: " + error.message);
       } else {
-        // ✅ Login success
         window.location.href = "dashboard.html";
       }
     });
 
-    // ✅ Auto-redirect if already logged in
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         window.location.href = "dashboard.html";
       }
     });
-  </script>
-</body>
-</html>
+  </script></body>
+        </html>
