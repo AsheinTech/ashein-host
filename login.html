@@ -41,7 +41,7 @@
 
     document.addEventListener("DOMContentLoaded", function () {
       supabase.auth.getUser().then(({ data: { user } }) => {
-        if (user?.email_confirmed_at) {
+        if (user) {
           window.location.href = 'dashboard.html';
         }
       });
@@ -57,12 +57,10 @@
 
       if (error) {
         alert("❌ Login failed: " + error.message);
-      } else if (!data.user.email_confirmed_at) {
-        alert("⚠️ Please verify your email before continuing.");
       } else {
         alert("✅ Login successful!");
         window.location.href = "dashboard.html";
       }
     });
   </script></body>
-        </html>
+                                                                       </html>
