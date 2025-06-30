@@ -21,13 +21,13 @@
   <section class="text-center py-20 px-6">
     <p class="text-sm bg-indigo-700 px-3 py-1 inline-block rounded-full mb-4">Version 1.0.0 Released</p>
     <h2 class="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-500">
-      The Intelligent WhatsApp Bot Platform
+      The Most Advanced Intelligent Bot Platform
     </h2>
     <p class="mt-4 text-gray-300 max-w-xl mx-auto">
-      Ashein Host combines cutting-edge AI with robust infrastructure to deliver the most advanced WhatsApp bot hosting platform on the market.
+      Ashein Host combines cutting-edge AI with robust infrastructure to deliver the most advanced WhatsApp bot hosting platform and other applications on the market To make your automation Easily accessible.
     </p>
     <div class="mt-8 space-x-4">
-      <a href="signup.html" class="bg-indigo-500 px-6 py-3 rounded text-white hover:bg-indigo-600">Start for Free</a>
+      <a href="signup.html" class="bg-indigo-500 px-6 py-3 rounded text-white hover:bg-indigo-600">Click Here to Start for Free</a>
       <a href="login.html" class="bg-gray-700 px-6 py-3 rounded text-white hover:bg-gray-600">Login Here</a>
     </div>
   </section>
@@ -41,8 +41,8 @@
         <p class="text-gray-300 mt-2">Deploy intelligent bots with NLP and machine learning.</p>
       </div>
       <div class="bg-gray-700 p-6 rounded-lg">
-        <h4 class="text-lg font-semibold text-purple-400">Instant Deployment</h4>
-        <p class="text-gray-300 mt-2">Launch bots in seconds with CI/CD automation.</p>
+        <h4 class="text-lg font-semibold text-purple-400">Instant Deployment Features</h4>
+        <p class="text-gray-300 mt-2">Launch bots in seconds with CI/CD automation fast and reliable.</p>
       </div>
       <div class="bg-gray-700 p-6 rounded-lg">
         <h4 class="text-lg font-semibold text-teal-400">Enterprise Security</h4>
@@ -53,12 +53,12 @@
         <p class="text-gray-300 mt-2">Auto-scaling to handle millions of messages.</p>
       </div>
       <div class="bg-gray-700 p-6 rounded-lg">
-        <h4 class="text-lg font-semibold text-pink-400">Developer Friendly</h4>
+        <h4 class="text-lg font-semibold text-pink-400">Developer Friendly Options</h4>
         <p class="text-gray-300 mt-2">SDKs and docs for all major languages.</p>
       </div>
       <div class="bg-gray-700 p-6 rounded-lg">
-        <h4 class="text-lg font-semibold text-cyan-400">Advanced Analytics</h4>
-        <p class="text-gray-300 mt-2">Real-time dashboards with automated reports.</p>
+        <h4 class="text-lg font-semibold text-cyan-400">Advanced Analytics Features</h4>
+        <p class="text-gray-300 mt-2">Real-time and wonderous dashboards with automated reports.</p>
       </div>
     </div>
   </section>
@@ -101,5 +101,19 @@
     <p class="text-sm text-gray-500">Made with ❤️ by Ashein Tech • © 2024 – 2025 Ashein Host</p>
   </footer>
 
+  <!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabase = supabase.createClient(
+    'https://gwraaxzunyibwvbrefji.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
+  );
+
+  supabase.auth.getUser().then(({ data }) => {
+    if (data?.user?.email_confirmed_at) {
+      window.location.href = 'dashboard.html';
+    }
+  });
+      </script>
 </body>
 </html>
