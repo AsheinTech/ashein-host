@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up | Ashein Host</title>
+
+  <!-- TailwindCSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body { background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
+      background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
+    }
+    .glow-border" style="border: 2px solid #38bdf8; box-shadow: 0 0 12px #38bdf8, 0 0 25px #0ea5e9; {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 12px #38bdf8, 0 0 25px #0ea5e9;
+    }
+  </style>
+</head>
+<body class="text-white flex items-center justify-center h-screen">
+
+  <div class="w-full max-w-md p-8 glow-border" style="border: 2px solid #38bdf8; box-shadow: 0 0 12px #38bdf8, 0 0 25px #0ea5e9; rounded-xl bg-gray-800">
+    <h2 class="text-3xl font-bold mb-6 text-center text-cyan-400">Create Account</h2>
+    <form id="signup-form">
+      <label class="block mb-3">
+        <span>Email</span>
+        <input type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-cyan-500" required>
+      </label>
+      <label class="block mb-3">
+        <span>Password</span>
+        <input type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-cyan-500" required>
+      </label>
+      <label class="block mb-6">
+        <span>Confirm Password</span>
+        <input type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-cyan-500" required>
+      </label>
+      <button type="submit" class="w-full py-3 bg-cyan-500 rounded hover:bg-cyan-600 font-semibold">
+        Sign Up
+      </button>
+      <p class="text-sm text-center mt-4 text-gray-400">
+        Already have an account? <a href="login.html" class="text-cyan-400 underline">Login</a>
+      </p>
+    </form>
+  </div>
+
+  <!-- Supabase Signup Script -->
+  <script>
+    const supabase = supabase.createClient(
+      'https://gwraaxzunyibwvbrefji.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
+    );
+
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const email = e.target[0].value;
+      const password = e.target[1].value;
+      const confirmPassword = e.target[2].value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password
+      });
+
+      if (error) {
+        alert("Signup failed: " + error.message);
+      } else {
+        alert("Signup successful! Please check your email to confirm.");
+        window.location.href = "login.html";
+      }
+    });
+  </script>
+
+
+  <script>
+    const supabase = supabase.createClient(
+      'https://gwraaxzunyibwvbrefji.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
+    );
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user?.email_confirmed_at) {
+        window.location.href = 'dashboard.html';
+      }
+    });
+  </script>
+  </body>
+  </html
