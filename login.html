@@ -2,86 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login | Ashein Host</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     body {
       background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
     }
-    .glow {
-      box-shadow: 0 0 15px #22d3ee, 0 0 25px #38bdf8;
+    .glow-border {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 12px #38bdf8, 0 0 25px #0ea5e9;
     }
   </style>
 </head>
-<body class="min-h-screen flex items-center justify-center px-4 text-white">
-  <div class="bg-gray-900 p-8 rounded-xl glow w-full max-w-sm text-center">
-    <h2 class="text-2xl font-bold text-cyan-400 mb-6">Welcome Back</h2>
-
-    <form id="login-form" class="space-y-4">
-      <input type="email" id="email" placeholder="Email" required class="w-full px-4 py-3 rounded bg-gray-800 outline-none focus:ring-2 ring-cyan-500"/>
-      <input type="password" id="password" placeholder="Password" required class="w-full px-4 py-3 rounded bg-gray-800 outline-none focus:ring-2 ring-cyan-500"/>
-      <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 rounded font-semibold">
+<body class="text-white flex items-center justify-center h-screen">
+  <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
+    <h2 class="text-3xl font-bold mb-6 text-center text-sky-400">Welcome Back</h2>
+    <form id="login-form">
+      <label class="block mb-4">
+        <span>Email</span>
+        <input id="email" type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required>
+      </label>
+      <label class="block mb-6">
+        <span>Password</span>
+        <input id="password" type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-sky-500" required>
+      </label>
+      <button type="submit" class="w-full py-3 bg-sky-500 rounded hover:bg-sky-600 font-semibold">
         Login
       </button>
+      <p class="text-sm text-center mt-4 text-gray-400">
+        Don’t have an account? <a href="signup.html" class="text-sky-400 underline">Sign Up</a>
+      </p>
     </form>
-
-    <p class="mt-4 text-sm text-gray-400">
-      Don’t have an account?
-      <a href="signup.html" class="text-cyan-400 hover:underline">Sign Up</a>
-    </p>
-
-    <!-- ✅ Resend Confirmation Email -->
-    <p class="text-sm text-blue-400 mt-4">
-      Didn’t receive confirmation?
-      <button id="resend-confirmation" class="underline hover:text-blue-300">Resend Email</button>
-    </p>
   </div>
 
   <script>
-    const supabase = supabase.createClient(
-      'https://gwraaxzunyibwvbrefji.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
-    );
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { createClient } = supabase;
 
-    // ✅ Login form
-    document.getElementById("login-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
+      const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4';
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      const client = createClient(supabaseUrl, supabaseKey);
 
-      if (error) {
-        alert("❌ Login failed: " + error.message);
-      } else {
-        alert("✅ Login successful!");
+      // Check if already logged in
+      const { data: { user } } = await client.auth.getUser();
+      if (user) {
         window.location.href = "dashboard.html";
+        return;
       }
-    });
 
-    // ✅ Resend confirmation email
-    document.getElementById("resend-confirmation").addEventListener("click", async () => {
-      const email = prompt("Enter your email address to resend confirmation:");
-      if (!email) return;
+      // Login form submission
+      document.getElementById("login-form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-      const { error } = await supabase.auth.resend({
-        type: "signup",
-        email: email
+        const { error } = await client.auth.signInWithPassword({ email, password });
+
+        if (error) {
+          alert("❌ Login failed: " + error.message);
+        } else {
+          alert("✅ Login successful!");
+          window.location.href = "dashboard.html";
+        }
       });
-
-      if (error) {
-        alert("❌ Failed to resend confirmation: " + error.message);
-      } else {
-        alert("✅ Confirmation email sent! Check your inbox.");
-      }
     });
   </script>
 </body>
-        </html>
+  </html>
