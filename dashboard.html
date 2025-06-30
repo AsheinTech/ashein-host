@@ -15,6 +15,7 @@
     body {
       background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
     }
+
     .glow-box {
       box-shadow: 0 0 12px #38bdf8, 0 0 20px #0ea5e9;
     }
@@ -25,11 +26,13 @@
   <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-xl glow-box">
     <h1 class="text-3xl font-bold text-cyan-400 mb-4 text-center">Welcome to Your Dashboard</h1>
 
+    <!-- User Info -->
     <div class="mb-6 text-center">
       <p class="text-gray-300">Logged in as:</p>
       <p id="user-email" class="font-semibold text-blue-300">Loading...</p>
     </div>
 
+    <!-- Create Bot Form -->
     <div class="bg-gray-900 p-6 rounded-lg mb-8">
       <h2 class="text-xl font-semibold text-cyan-300 mb-4">🚀 Create New Bot</h2>
       <form id="bot-form" class="space-y-4">
@@ -47,11 +50,13 @@
       </form>
     </div>
 
+    <!-- Bot List -->
     <div class="bg-gray-900 p-6 rounded-lg">
       <h2 class="text-xl font-semibold text-cyan-300 mb-4">🤖 Your Bots</h2>
       <ul id="bot-list" class="space-y-3 text-left text-white"></ul>
     </div>
 
+    <!-- Logout -->
     <div class="text-center mt-6">
       <button id="logout" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded font-semibold">
         Logout
@@ -60,16 +65,16 @@
   </div>
 
   <script>
-    const supabase = supabase.createClient(
-      'https://gwraaxzunyibwvbrefji.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
-    );
+    const { createClient } = supabase;
+    const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4';
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
     let currentUser = null;
 
     document.addEventListener("DOMContentLoaded", async () => {
       const { data: sessionData, error } = await supabase.auth.getSession();
-      console.log("🔍 Session on Dashboard:", sessionData);
+      console.log("🔍 Session:", sessionData);
 
       if (!sessionData.session || !sessionData.session.user) {
         console.warn("⚠️ No session, redirecting to login...");
@@ -115,13 +120,11 @@
       }
     });
 
-    // Logout
     document.getElementById("logout").addEventListener("click", async () => {
       await supabase.auth.signOut();
       window.location.href = "login.html";
     });
 
-    // Create bot
     document.getElementById("bot-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const botName = document.getElementById("bot-name").value;
@@ -140,4 +143,4 @@
     });
   </script>
 </body>
-        </html>
+      </html>
