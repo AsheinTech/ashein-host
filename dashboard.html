@@ -5,17 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Dashboard | Ashein Host</title>
 
-  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Supabase -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     body {
       background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
     }
-
     .glow-box {
       box-shadow: 0 0 12px #38bdf8, 0 0 20px #0ea5e9;
     }
@@ -26,13 +22,11 @@
   <div class="max-w-3xl mx-auto bg-gray-800 p-8 rounded-xl glow-box">
     <h1 class="text-3xl font-bold text-cyan-400 mb-4 text-center">Welcome to Your Dashboard</h1>
 
-    <!-- User Info -->
     <div class="mb-6 text-center">
       <p class="text-gray-300">Logged in as:</p>
       <p id="user-email" class="font-semibold text-blue-300">Loading...</p>
     </div>
 
-    <!-- Create Bot Form -->
     <div class="bg-gray-900 p-6 rounded-lg mb-8">
       <h2 class="text-xl font-semibold text-cyan-300 mb-4">🚀 Create New Bot</h2>
       <form id="bot-form" class="space-y-4">
@@ -50,13 +44,11 @@
       </form>
     </div>
 
-    <!-- Bot List -->
     <div class="bg-gray-900 p-6 rounded-lg">
       <h2 class="text-xl font-semibold text-cyan-300 mb-4">🤖 Your Bots</h2>
       <ul id="bot-list" class="space-y-3 text-left text-white"></ul>
     </div>
 
-    <!-- Logout -->
     <div class="text-center mt-6">
       <button id="logout" class="bg-red-500 hover:bg-red-600 px-6 py-2 rounded font-semibold">
         Logout
@@ -68,23 +60,27 @@
     const { createClient } = supabase;
     const supabaseUrl = 'https://gwraaxzunyibwvbrefji.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4';
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const client = createClient(supabaseUrl, supabaseKey);
 
     let currentUser = null;
 
     document.addEventListener("DOMContentLoaded", async () => {
-      const { data: sessionData, error } = await supabase.auth.getSession();
-      console.log("🔍 Session:", sessionData);
+      console.log("✅ DOM loaded, checking session...");
 
-      if (!sessionData.session || !sessionData.session.user) {
-        console.warn("⚠️ No session, redirecting to login...");
-        return (window.location.href = "login.html");
+      const { data: sessionData, error } = await client.auth.getSession();
+      console.log("🔍 Session Data:", sessionData);
+      console.log("❌ Error (if any):", error);
+
+      if (!sessionData || !sessionData.session || !sessionData.session.user) {
+        console.warn("⚠️ No user session found. Redirecting to login...");
+        window.location.href = "login.html";
+        return;
       }
 
       currentUser = sessionData.session.user;
       document.getElementById("user-email").textContent = currentUser.email;
 
-      const { data: bots, error: fetchError } = await supabase
+      const { data: bots, error: fetchError } = await client
         .from("bots")
         .select("*")
         .eq("user_id", currentUser.id)
@@ -121,7 +117,7 @@
     });
 
     document.getElementById("logout").addEventListener("click", async () => {
-      await supabase.auth.signOut();
+      await client.auth.signOut();
       window.location.href = "login.html";
     });
 
@@ -130,7 +126,7 @@
       const botName = document.getElementById("bot-name").value;
       const botDesc = document.getElementById("bot-desc").value;
 
-      const { error } = await supabase
+      const { error } = await client
         .from("bots")
         .insert([{ name: botName, description: botDesc, user_id: currentUser.id }]);
 
@@ -143,4 +139,4 @@
     });
   </script>
 </body>
-      </html>
+        </html>
