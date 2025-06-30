@@ -1,1 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign Up | Ashein Host</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
+    }
+    .glow-border {
+      border: 2px solid #38bdf8;
+      box-shadow: 0 0 12px #38bdf8, 0 0 25px #0ea5e9;
+    }
+  </style>
+</head>
+<body class="text-white flex items-center justify-center h-screen">
 
+  <div class="w-full max-w-md p-8 glow-border rounded-xl bg-gray-800">
+    <h2 class="text-3xl font-bold mb-6 text-center text-cyan-400">Create Account</h2>
+    <form>
+      <label class="block mb-3">
+        <span>Email</span>
+        <input type="email" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-cyan-500" required>
+      </label>
+      <label class="block mb-3">
+        <span>Password</span>
+        <input type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-cyan-500" required>
+      </label>
+      <label class="block mb-6">
+        <span>Confirm Password</span>
+        <input type="password" class="w-full mt-1 p-3 rounded bg-gray-900 text-white outline-none focus:ring-2 ring-cyan-500" required>
+      </label>
+      <button type="submit" class="w-full py-3 bg-cyan-500 rounded hover:bg-cyan-600 font-semibold">
+        Sign Up
+      </button>
+      <p class="text-sm text-center mt-4 text-gray-400">
+        Already have an account? <a href="login.html" class="text-cyan-400 underline">Login</a>
+      </p>
+    </form>
+  </div>
+
+</body>
+  </html>
