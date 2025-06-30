@@ -1,96 +1,87 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Ashein Host</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Ashein Host</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #000428, #004e92);
-      color: #fff;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      background: radial-gradient(ellipse at bottom, #0f172a 0%, #0a0a23 100%);
     }
-    .box {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 0 15px #00f0ff;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-    .box h2 {
-      margin-bottom: 1rem;
-    }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 1rem;
-      border: none;
-      border-radius: 6px;
-      outline: none;
-    }
-    button {
-      width: 100%;
-      padding: 0.8rem;
-      background: #00f0ff;
-      color: #000;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    a {
-      color: #00f0ff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
+    .glow {
+      box-shadow: 0 0 15px #22d3ee, 0 0 25px #38bdf8;
     }
   </style>
 </head>
-<body>
-  <div class="box">
-    <h2>Welcome Back</h2>
-    <form id="login-form">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
-      <button type="submit">Login</button>
+<body class="min-h-screen flex items-center justify-center px-4 text-white">
+  <div class="bg-gray-900 p-8 rounded-xl glow w-full max-w-sm text-center">
+    <h2 class="text-2xl font-bold text-cyan-400 mb-6">Welcome Back</h2>
+
+    <form id="login-form" class="space-y-4">
+      <input type="email" id="email" placeholder="Email" required class="w-full px-4 py-3 rounded bg-gray-800 outline-none focus:ring-2 ring-cyan-500"/>
+      <input type="password" id="password" placeholder="Password" required class="w-full px-4 py-3 rounded bg-gray-800 outline-none focus:ring-2 ring-cyan-500"/>
+      <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-600 rounded font-semibold">
+        Login
+      </button>
     </form>
-    <p>Don’t have an account? <a href="signup.html">Sign Up</a></p>
-  </div>  <!-- ✅ Supabase SDK -->  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>  <script>
+
+    <p class="mt-4 text-sm text-gray-400">
+      Don’t have an account?
+      <a href="signup.html" class="text-cyan-400 hover:underline">Sign Up</a>
+    </p>
+
+    <!-- ✅ Resend Confirmation Email -->
+    <p class="text-sm text-blue-400 mt-4">
+      Didn’t receive confirmation?
+      <button id="resend-confirmation" class="underline hover:text-blue-300">Resend Email</button>
+    </p>
+  </div>
+
+  <script>
     const supabase = supabase.createClient(
-      "https://gwraaxzunyibwvbrefji.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4"
+      'https://gwraaxzunyibwvbrefji.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4'
     );
 
+    // ✅ Login form
     document.getElementById("login-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
       if (error) {
         alert("❌ Login failed: " + error.message);
       } else {
+        alert("✅ Login successful!");
         window.location.href = "dashboard.html";
       }
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        window.location.href = "dashboard.html";
+    // ✅ Resend confirmation email
+    document.getElementById("resend-confirmation").addEventListener("click", async () => {
+      const email = prompt("Enter your email address to resend confirmation:");
+      if (!email) return;
+
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: email
+      });
+
+      if (error) {
+        alert("❌ Failed to resend confirmation: " + error.message);
+      } else {
+        alert("✅ Confirmation email sent! Check your inbox.");
       }
     });
-  </script></body>
+  </script>
+</body>
         </html>
