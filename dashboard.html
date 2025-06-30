@@ -63,7 +63,7 @@
     </div>
   </div>
 
-  <!-- Supabase Auth + Bot Logic -->
+  <!-- Supabase Logic -->
   <script>
     const supabase = supabase.createClient(
       'https://gwraaxzunyibwvbrefji.supabase.co',
@@ -72,14 +72,17 @@
 
     let currentUser = null;
 
-    // Get and show user info
-    supabase.auth.getUser().then(async ({ data, error }) => {
-      if (!data.user) return (window.location.href = "login.html");
+    document.addEventListener("DOMContentLoaded", async () => {
+      const { data: sessionData, error } = await supabase.auth.getSession();
 
-      currentUser = data.user;
+      if (!sessionData.session || !sessionData.session.user) {
+        return (window.location.href = "login.html");
+      }
+
+      currentUser = sessionData.session.user;
       document.getElementById("user-email").textContent = currentUser.email;
 
-      // Fetch and display bots
+      // Fetch bots
       const { data: bots, error: fetchError } = await supabase
         .from("bots")
         .select("*")
@@ -115,13 +118,11 @@
       }
     });
 
-    // Logout
     document.getElementById("logout").addEventListener("click", async () => {
       await supabase.auth.signOut();
       window.location.href = "login.html";
     });
 
-    // Create bot
     document.getElementById("bot-form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const botName = document.getElementById("bot-name").value;
@@ -140,4 +141,4 @@
     });
   </script>
 </body>
-  </html>
+            </html
