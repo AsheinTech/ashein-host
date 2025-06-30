@@ -57,33 +57,38 @@
     <a href="signup.html">Don't have an account? Sign Up</a>
   </div>
 
-  <script>
-    const supabase = supabase.createClient(
-      "https://gwraaxzunyibwvbrefji.supabase.co",
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4"
-    );
+    <!-- Load Supabase SDK First -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-    document.getElementById("login-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("email").value.trim();
-      const password = document.getElementById("password").value.trim();
+<script>
+  // ✅ Initialize Supabase
+  const supabase = supabase.createClient(
+    "https://gwraaxzunyibwvbrefji.supabase.co",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd3cmFheHp1bnlpYnd2YnJlZmppIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTExMDM0MTksImV4cCI6MjA2NjY3OTQxOX0.JCFCIWlu96e24ln2TY9RnaPcyI_WE-6rM0DhLmKqr-4"
+  );
 
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  // ✅ Handle login
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-      if (error) {
-        alert("❌ Login failed: " + error.message);
-      } else {
-        // ✅ Login successful - go to dashboard
-        window.location.href = "dashboard.html";
-      }
-    });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
-    // ✅ Optional: Auto-redirect if already logged in
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        window.location.href = "dashboard.html";
-      }
-    });
+    if (error) {
+      alert("❌ Login failed: " + error.message);
+    } else {
+      // ✅ Login successful
+      window.location.href = "dashboard.html";
+    }
+  });
+
+  // ✅ Auto-redirect if already logged in
+  supabase.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      window.location.href = "dashboard.html";
+    }
+  });
   </script>
 </body>
 </html>
